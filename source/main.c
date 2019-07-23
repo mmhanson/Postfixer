@@ -34,7 +34,7 @@ void match_term(const char *expr, int *scan_idx);
 
 int main(int argc, char *argv[])
 {
-    const char infix_expr[] = "9-5+2";
+    const char infix_expr[] = "9*5+2";
     const char postfix_expr[6]; // exactly as big as infix_expr
 
     printf("infix expression: %s \n", infix_expr);
@@ -60,14 +60,7 @@ void match_expr(const char *expr, int *scan_idx)
     match_term(expr, scan_idx);
 
     // print op after two terms have been printed
-    if (operator == '+')
-    {
-        printf("+");
-    }
-    else if (operator == '-')
-    {
-        printf("-");
-    }
+    printf("%c", operator);
 
     // If there is any expression left to parse.
     if (expr[*scan_idx] != 0)
