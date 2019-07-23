@@ -13,7 +13,7 @@ clean:
 all: build/main.o
 	gcc -o translator build/main.o
 
-build/main.o:
+build/main.o: source/main.c
 	mkdir -p build
 	gcc -o build/main.o -g -c source/main.c
 

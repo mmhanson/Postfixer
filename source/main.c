@@ -35,8 +35,12 @@ void match_term(const char *expr, int *scan_idx);
 
 int main(int argc, char *argv[])
 {
+    /*
     const char infix_expr[] = "9-5+2";
     const char postfix_expr[6]; // exactly as big as infix_expr
+    */
+    const char infix_expr[] = "1+1-0";
+    const char postfix_expr[4]; // exactly as big as infix_expr
 
     printf("infix expression: %s \n", infix_expr);
     printf("postfix expression:");
@@ -57,8 +61,9 @@ void match_expr(const char *expr, int *scan_idx)
     match_term(expr, scan_idx);
 
     char operator = expr[*scan_idx]; // get op for later printing
-    *scan_idx++;
+    *scan_idx += 1;
     match_term(expr, scan_idx);
+
     // print op after two terms have been printed
     if (operator == '+')
     {
@@ -68,7 +73,12 @@ void match_expr(const char *expr, int *scan_idx)
     {
         printf("-");
     }
-    match_expr(expr, scan_idx);
+
+    // If there is any expression left to parse.
+    if (expr[*scan_idx] != 0)
+    {
+        match_expr(expr, scan_idx);
+    }
 }
 
 void match_term(const char *expr, int *scan_idx)
@@ -76,7 +86,7 @@ void match_term(const char *expr, int *scan_idx)
     char lookahead = expr[*scan_idx];
     if (lookahead == '0' | lookahead == '1')
     {
-        *scan_idx++;
+        *scan_idx += 1;
         printf("%c", lookahead);
     }
     else
