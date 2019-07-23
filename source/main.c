@@ -58,7 +58,7 @@ void parse_term(const char *term, int *scan_idx);
 
 int main(int argc, char *argv[])
 {
-    const char infix_expr[] = "9*5+2";
+    const char infix_expr[] = "9*5+2/8-3";
     const char postfix_expr[6]; // exactly as big as infix_expr
 
     printf("infix expression: %s \n", infix_expr);
