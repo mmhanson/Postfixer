@@ -7,8 +7,15 @@
  * multiplication, and division.
  * 
  * This is based off of the following context-free grammar:
- *   expr -> term + expr1 | term - expr1 | term
- *   term -> 0 | 1
+ *   expr -> term rest
+ *   rest -> + term {print('+')} rest
+ *         | - term {print('-')} rest
+ *         | * term {print('*')} rest
+ *         | / term {print('/')} rest
+ *         | EMPTY_STRING
+ *   term -> 0 {print('0')}
+ *         | ...
+ *         | 9 {print('9')}
  * Which is intentionally right-recursive to avoid infinite recursion.
  * And they are implemented with a recursive descent parser.
  * TODO add example syntax tree for '9-5+2'.
@@ -28,6 +35,8 @@
 void translate(const char *infix_expr);
 
 void match_expr(const char *expr, int *scan_idx);
+
+void match_rest(const char *expr, int *scan_idx);
 
 void match_term(const char *expr, int *scan_idx);
 
@@ -54,17 +63,20 @@ void translate(const char *infix_expr)
 void match_expr(const char *expr, int *scan_idx)
 {
     match_term(expr, scan_idx);
+    match_rest(expr, scan_idx);
+}
 
-    char operator = expr[*scan_idx]; // get op for later printing
+void match_rest(const char *rest, int *scan_idx)
+{
+    char operator = rest[*scan_idx];
     *scan_idx += 1;
-
-    // print op after two terms have been printed
-    printf("%c", operator);
+    match_term(rest, scan_idx);
+    printf("%c", operator); // print op after two terms have been printed
 
     // If there is any expression left to parse.
-    if (expr[*scan_idx] != 0)
+    if (rest[*scan_idx] != 0)
     {
-        match_expr(expr, scan_idx);
+        match_rest(rest, scan_idx);
     }
 }
 
@@ -78,7 +90,6 @@ void match_term(const char *expr, int *scan_idx)
     }
     else
     {
-        // TODO report syntax error
         printf("Syntax error. Expected a digit. \n");
     }
 }
