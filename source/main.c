@@ -26,54 +26,61 @@
  *
  * @infix_expr: the infix expression to translate.
  */
-void translate(char *infix_expr);
+void translate(const char *infix_expr);
 
-void match_expr(char *expr);
+void match_expr(const char *expr, int *scan_idx);
+
+void match_term(const char *expr, int *scan_idx);
 
 
 int main(int argc, char *argv[])
 {
-    const char[] infix_expr = "9-5+2";
-    const char[6] postfix_expr; // exactly as big as infix_expr
+    const char infix_expr[] = "9-5+2";
+    const char postfix_expr[6]; // exactly as big as infix_expr
 
     printf("infix expression: %s \n", infix_expr);
     printf("postfix expression:");
-    translate(&infix_expr);
+    translate(&(infix_expr[0])); // TODO fix
     printf("\n");
 }
 
-char get_next_lookahead(char *infix_expr)
-{
-    static int lookahead_idx = 0; // preseved between calls
-
-    char next_lookahead = *infix_expr[lookahead_idx];
-    lookahead_idx++;
-    return next_lookahead;
-}
-
-void translate(char *infix_expr)
+void translate(const char *infix_expr)
 {
     // Since 'expr' is the starting nonterminal symbol in the grammar.
     // TODO fix bad plumbing
     int scan_idx = 0;
-    match_expr(infix_expr, scan_idx);
+    match_expr(infix_expr, &scan_idx);
 }
 
-void match_expr(char *expr, scan_idx)
+void match_expr(const char *expr, int *scan_idx)
 {
-    match_term(infix_expr, postfix_expr);
+    match_term(expr, scan_idx);
 
-    char lookahead = get_next_lookahead(infix_expr);
-    if (lookahead == '+')
+    char operator = expr[*scan_idx]; // get op for later printing
+    *scan_idx++;
+    match_term(expr, scan_idx);
+    // print op after two terms have been printed
+    if (operator == '+')
     {
-        match_term();
         printf("+");
-        char *expr1 = expr
-        match_expr(expr1);
     }
-    else if (lookahead == '-')
+    else if (operator == '-')
     {
-        
+        printf("-");
     }
-    else; // do nothing. Expr is only 'term' (a digit)
+    match_expr(expr, scan_idx);
+}
+
+void match_term(const char *expr, int *scan_idx)
+{
+    char lookahead = expr[*scan_idx];
+    if (lookahead == '0' | lookahead == '1')
+    {
+        *scan_idx++;
+        printf("%c", lookahead);
+    }
+    else
+    {
+        // TODO report syntax error
+    }
 }
