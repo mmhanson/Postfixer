@@ -21,47 +21,57 @@
 #include <stdio.h>
 
 /*
- * Translate an infix expression to a postfix expression.
+ * Translate an infix expression to a postfix expression and print it to stdout.
  * CAUTION: @postfix_expr must have at least as much capacity as @infix_expr.
  *
  * @infix_expr: the infix expression to translate.
- * @postfix_expr: points to storage for the translated postfix expression.
  */
-void translate(char *infix_expr, char *postfix_expr);
+void translate(char *infix_expr);
 
-void match_expr(char *, char *);
+void match_expr(char *expr);
 
 
 int main(int argc, char *argv[])
 {
     const char[] infix_expr = "9-5+2";
     const char[6] postfix_expr; // exactly as big as infix_expr
-    translate(&infix_expr, &postfix_expr);
 
     printf("infix expression: %s \n", infix_expr);
-    printf("postfix expression: %s \n", postfix_expr);
+    printf("postfix expression:");
+    translate(&infix_expr);
+    printf("\n");
 }
 
 char get_next_lookahead(char *infix_expr)
 {
     static int lookahead_idx = 0; // preseved between calls
+
+    char next_lookahead = *infix_expr[lookahead_idx];
+    lookahead_idx++;
+    return next_lookahead;
 }
 
-void translate(char *infix_expr, char *postfix_expr)
+void translate(char *infix_expr)
 {
     // Since 'expr' is the starting nonterminal symbol in the grammar.
     // TODO fix bad plumbing
-    match_expr(infix_expr, postfix_expr);
+    int scan_idx = 0;
+    match_expr(infix_expr, scan_idx);
 }
 
-void match_expr(char *infix_expr, char *postfix_expr)
+void match_expr(char *expr, scan_idx)
 {
     match_term(infix_expr, postfix_expr);
-    if (lookahead == '-')
+
+    char lookahead = get_next_lookahead(infix_expr);
+    if (lookahead == '+')
     {
-        
+        match_term();
+        printf("+");
+        char *expr1 = expr
+        match_expr(expr1);
     }
-    else if (lookahead == '+')
+    else if (lookahead == '-')
     {
         
     }
