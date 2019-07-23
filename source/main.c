@@ -57,7 +57,6 @@ void match_expr(const char *expr, int *scan_idx)
 
     char operator = expr[*scan_idx]; // get op for later printing
     *scan_idx += 1;
-    match_term(expr, scan_idx);
 
     // print op after two terms have been printed
     printf("%c", operator);
@@ -80,5 +79,6 @@ void match_term(const char *expr, int *scan_idx)
     else
     {
         // TODO report syntax error
+        printf("Syntax error. Expected a digit. \n");
     }
 }
