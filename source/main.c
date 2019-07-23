@@ -10,8 +10,9 @@
  * This is based off of the following context-free grammar:
  *   expr -> term + expr1 | term - expr1 | term
  *   term -> 0 | 1
+ * Which is intentionally right-recursive to avoid infinite recursion.
  * And they are implemented with a recursive descent parser.
- * TODO add example syntax tree for '9-5+3'.
+ * TODO add example syntax tree for '9-5+2'.
  *
  * Written by Max Hanson, July 2019.
  * Licensed under MIT, see LICENSE.md for more details.
@@ -28,10 +29,12 @@
  */
 void translate(char *infix_expr, char *postfix_expr);
 
+void match_expr(char *, char *);
+
 
 int main(int argc, char *argv[])
 {
-    const char[] infix_expr = "9+5-3";
+    const char[] infix_expr = "9-5+2";
     const char[6] postfix_expr; // exactly as big as infix_expr
     translate(&infix_expr, &postfix_expr);
 
@@ -39,7 +42,28 @@ int main(int argc, char *argv[])
     printf("postfix expression: %s \n", postfix_expr);
 }
 
+char get_next_lookahead(char *infix_expr)
+{
+    static int lookahead_idx = 0; // preseved between calls
+}
+
 void translate(char *infix_expr, char *postfix_expr)
 {
-    // TODO
+    // Since 'expr' is the starting nonterminal symbol in the grammar.
+    // TODO fix bad plumbing
+    match_expr(infix_expr, postfix_expr);
+}
+
+void match_expr(char *infix_expr, char *postfix_expr)
+{
+    match_term(infix_expr, postfix_expr);
+    if (lookahead == '-')
+    {
+        
+    }
+    else if (lookahead == '+')
+    {
+        
+    }
+    else; // do nothing. Expr is only 'term' (a digit)
 }
