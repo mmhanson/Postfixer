@@ -19,8 +19,27 @@
 
 #include <stdio.h>
 
+/*
+ * Translate an infix expression to a postfix expression.
+ * CAUTION: @postfix_expr must have at least as much capacity as @infix_expr.
+ *
+ * @infix_expr: the infix expression to translate.
+ * @postfix_expr: points to storage for the translated postfix expression.
+ */
+void translate(char *infix_expr, char *postfix_expr);
+
 
 int main(int argc, char *argv[])
+{
+    const char[] infix_expr = "9+5-3";
+    const char[6] postfix_expr; // exactly as big as infix_expr
+    translate(&infix_expr, &postfix_expr);
+
+    printf("infix expression: %s \n", infix_expr);
+    printf("postfix expression: %s \n", postfix_expr);
+}
+
+void translate(char *infix_expr, char *postfix_expr)
 {
     // TODO
 }
