@@ -13,9 +13,8 @@
  *   term -> 0 {print('0')}
  *         | ...
  *         | 9 {print('9')}
- * Which is intentionally right-recursive to avoid infinite recursion. Note this
- * means that it can only handle single-digit decimal numbers and addition,
- * subtraction, multiplication, and division.
+ * Note this means that it can only handle single-digit decimal numbers and
+ * addition, subtraction, multiplication, and division.
  *
  * Written by Max Hanson, July 2019.
  * Licensed under MIT, see LICENSE.md for more details.
@@ -25,7 +24,6 @@
 
 /*
  * Translate an infix expression to a postfix expression and print it to stdout.
- * CAUTION: @postfix_expr must have at least as much capacity as @infix_expr.
  *
  * @infix_expr: the infix expression to translate.
  */
@@ -59,11 +57,10 @@ void parse_term(const char *term, int *scan_idx);
 int main(int argc, char *argv[])
 {
     const char infix_expr[] = "9*5+2/8-3";
-    const char postfix_expr[6]; // exactly as big as infix_expr
 
     printf("infix expression: %s \n", infix_expr);
     printf("postfix expression: ");
-    translate(&(infix_expr[0])); // TODO fix
+    translate((const char*)&infix_expr);
     printf("\n");
 }
 
