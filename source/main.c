@@ -3,9 +3,8 @@
  * This is based heavily off of the dragon book's introduction to parsing theory
  * in chapter 2. See wikipedia for the jargon if you don't have a copy.
  *
- * Right now it can only handle binary digits (0 & 1) and addition/subtraction
- * (+ & -).
- * TODO add support for deicmal digits and multiplication/division.
+ * It can only handle single-digit numbers and addition, subtraction,
+ * multiplication, and division.
  * 
  * This is based off of the following context-free grammar:
  *   expr -> term + expr1 | term - expr1 | term
@@ -35,15 +34,11 @@ void match_term(const char *expr, int *scan_idx);
 
 int main(int argc, char *argv[])
 {
-    /*
     const char infix_expr[] = "9-5+2";
     const char postfix_expr[6]; // exactly as big as infix_expr
-    */
-    const char infix_expr[] = "1+1-0";
-    const char postfix_expr[4]; // exactly as big as infix_expr
 
     printf("infix expression: %s \n", infix_expr);
-    printf("postfix expression:");
+    printf("postfix expression: ");
     translate(&(infix_expr[0])); // TODO fix
     printf("\n");
 }
@@ -84,7 +79,7 @@ void match_expr(const char *expr, int *scan_idx)
 void match_term(const char *expr, int *scan_idx)
 {
     char lookahead = expr[*scan_idx];
-    if (lookahead == '0' | lookahead == '1')
+    if (lookahead >= '0' && lookahead <= '9')
     {
         *scan_idx += 1;
         printf("%c", lookahead);
