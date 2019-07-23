@@ -2,9 +2,6 @@
  * A simple infix to postfix translator.
  * This is based heavily off of the dragon book's introduction to parsing theory
  * in chapter 2. See wikipedia for the jargon if you don't have a copy.
- *
- * It can only handle single-digit numbers and addition, subtraction,
- * multiplication, and division.
  * 
  * This is based off of the following context-free grammar:
  *   expr -> term rest
@@ -16,9 +13,9 @@
  *   term -> 0 {print('0')}
  *         | ...
  *         | 9 {print('9')}
- * Which is intentionally right-recursive to avoid infinite recursion.
- * And they are implemented with a recursive descent parser.
- * TODO add example syntax tree for '9-5+2'.
+ * Which is intentionally right-recursive to avoid infinite recursion. Note this
+ * means that it can only handle single-digit decimal numbers and addition,
+ * subtraction, multiplication, and division.
  *
  * Written by Max Hanson, July 2019.
  * Licensed under MIT, see LICENSE.md for more details.
@@ -34,11 +31,29 @@
  */
 void translate(const char *infix_expr);
 
-void match_expr(const char *expr, int *scan_idx);
+/*
+ * Parse an 'expr' production.
+ *
+ * @expr: string to parse.
+ * @scan_idx: where to start parsing. Pointer so recursive calls can modify.
+ */
+void parse_expr(const char *expr, int *scan_idx);
 
-void match_rest(const char *expr, int *scan_idx);
+/*
+ * Parse a 'rest' production.
+ *
+ * @rest: string to parse.
+ * @scan_idx: where to start parsing. Pointer so recursive calls can modify.
+ */
+void parse_rest(const char *rest, int *scan_idx);
 
-void match_term(const char *expr, int *scan_idx);
+/*
+ * Parse a 'term' production.
+ *
+ * @term: string to parse.
+ * @scan_idx: where to start parsing. Pointer so recursive calls can modify.
+ */
+void parse_term(const char *term, int *scan_idx);
 
 
 int main(int argc, char *argv[])
@@ -55,32 +70,34 @@ int main(int argc, char *argv[])
 void translate(const char *infix_expr)
 {
     // Since 'expr' is the starting nonterminal symbol in the grammar.
-    // TODO fix bad plumbing
     int scan_idx = 0;
-    match_expr(infix_expr, &scan_idx);
+    parse_expr(infix_expr, &scan_idx);
 }
 
-void match_expr(const char *expr, int *scan_idx)
+void parse_expr(const char *expr, int *scan_idx)
 {
-    match_term(expr, scan_idx);
-    match_rest(expr, scan_idx);
+    // since the 'expr' production consists of a 'term' and the 'rest'
+    parse_term(expr, scan_idx);
+    parse_rest(expr, scan_idx);
 }
 
-void match_rest(const char *rest, int *scan_idx)
+void parse_rest(const char *rest, int *scan_idx)
 {
+    // See the 'rest' production in the grammar up top for clarification.
+
     char operator = rest[*scan_idx];
     *scan_idx += 1;
-    match_term(rest, scan_idx);
+    parse_term(rest, scan_idx);
     printf("%c", operator); // print op after two terms have been printed
 
     // If there is any expression left to parse.
     if (rest[*scan_idx] != 0)
     {
-        match_rest(rest, scan_idx);
+        parse_rest(rest, scan_idx);
     }
 }
 
-void match_term(const char *expr, int *scan_idx)
+void parse_term(const char *expr, int *scan_idx)
 {
     char lookahead = expr[*scan_idx];
     if (lookahead >= '0' && lookahead <= '9')
